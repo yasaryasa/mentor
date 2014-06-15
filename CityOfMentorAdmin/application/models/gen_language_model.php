@@ -1,0 +1,285 @@
+<?php
+/*
+ * Bu Yazılım İmleç A.Ş. Tarafından Geliştirilmiştir. 
+ * http://www.imlec.com.tr 
+ * http://www.imleç.com.tr 
+ */
+class gen_language_model extends Imlec_Model {
+    public function get_gen_languages( $page=1 , $auth_user = 0 , $term = "", $user_id, $user_role, $user_level ) {
+        if ( $this->get_see_all("gen_languages")) {
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+        } else if (!$this->get_see_others("gen_languages")) {
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+            
+            $this->db->where("gen_languages.gen_language_owner", $user_id);
+        } else {
+            $user_level = $user_level;
+            $this->db->select(USER_TABLE.".user_id")->from(USER_TABLE);
+
+            $this->db->join(ROLE_TABLE, USER_TABLE . ".user_role_id = " . ROLE_TABLE . ".role_id", "left");
+            $this->db->where(ROLE_TABLE.".role_level >", $user_level);
+            $users = $this->db->get();
+
+            $u = array($user_id);
+            if ( $users ) {
+                foreach ( $users->result() as $user ) {
+                    $u[] = $user->user_id;
+                }
+            }
+
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+            
+            $this->db->where_in("gen_languages.gen_language_owner", $u );
+        }
+
+        if ( !empty($term)) {
+        $this->db->where("gen_languages.language_title LIKE '%".$term."%' OR gen_languages.language_short LIKE '%".$term."%' OR gen_languages.language_created LIKE '%".$term."%' OR gen_languages.language_modified LIKE '%".$term."%' ");
+        } else {
+            $this->db->limit( 10, ($page-1)*10 );
+        }
+
+        return $this->db->get();
+    }
+    
+    
+    public function get_by_language_id ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.language_id", $value);
+        return $this->db->get()->row();
+    }
+
+    public function get_by_language_title ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.language_title", $value);
+        return $this->db->get()->row();
+    }
+
+    public function get_by_language_short ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.language_short", $value);
+        return $this->db->get()->row();
+    }
+
+    public function get_by_language_created ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.language_created", $value);
+        return $this->db->get()->row();
+    }
+
+    public function get_by_language_modified ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.language_modified", $value);
+        return $this->db->get()->row();
+    }
+
+    public function get_by_gen_language_owner ( $value ) {
+        $this->db->select("gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced,")->from("gen_languages");
+        
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+        $this->db->where("gen_languages.gen_language_owner", $value);
+        return $this->db->get()->row();
+    }
+
+    
+    public function get_auth_users_reference ($user_id,$user_level) {
+        if ( $this->get_see_all("auth_users") ) {
+
+        } else if ($this->get_see_others("auth_users")) {
+            $user_level = $user_level;
+            $this->db->select(USER_TABLE.".user_id")->from(USER_TABLE);
+
+            $this->db->join(ROLE_TABLE, USER_TABLE . ".user_role_id = " . ROLE_TABLE . ".role_id", "left");
+            $this->db->where(ROLE_TABLE.".role_level >", $user_level);
+            $users = $this->db->get();
+
+            $u = array($user_id);
+            if ( $users ) {
+                    foreach ( $users->result() as $user ) {
+                            $u[] = $user->user_id;
+                    }
+            }
+
+            
+            $this->db->where_in("auth_users.auth_user_owner", $u );
+
+        } else {
+            
+            $this->db->where("auth_users.auth_user_owner", $user_id);
+        }
+
+        return $this->db->get("auth_users");
+    }
+
+
+
+    public function get_gen_languages_count ($page , $auth_user = 0, $term = "", $user_id, $user_role, $user_level ) {
+
+        if ( $this->get_see_all("gen_languages")) {
+
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+
+        } else if (!$this->get_see_others("gen_languages")) {
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+
+            
+            $this->db->where("gen_languages.gen_language_owner", $user_id);
+
+
+        } else {
+            $user_level = $user_level;
+            $this->db->select(USER_TABLE.".user_id")->from(USER_TABLE);
+
+            $this->db->join(ROLE_TABLE, USER_TABLE . ".user_role_id = " . ROLE_TABLE . ".role_id", "left");
+            $this->db->where(ROLE_TABLE.".role_level >", $user_level);
+            $users = $this->db->get();
+
+            $u = array($user_id);
+            if ( $users ) {
+                foreach ( $users->result() as $user ) {
+                    $u[] = $user->user_id;
+                }
+            }
+
+            $this->db->select(
+                    "gen_languages.language_id,gen_languages.language_title,gen_languages.language_short,gen_languages.language_created,gen_languages.language_modified,gen_languages.gen_language_owner,auth_users_referenced.user_name as user_name_referenced,auth_users_referenced.user_id as user_id_referenced"
+            )->from("gen_languages");
+
+            
+            $this->db->join("auth_users as auth_users_referenced","gen_languages.gen_language_owner=auth_users_referenced.user_id","left");
+			
+            		
+            if ( $auth_user ) {
+                $this->db->where( "auth_users_referenced.user_id", $auth_user );
+            }
+		
+
+            
+            $this->db->where_in("gen_languages.gen_language_owner", $u );
+
+        }
+
+        if ( !empty($term)) {
+            $this->db->where("gen_languages.language_title LIKE '%".$term."%' OR gen_languages.language_short LIKE '%".$term."%' OR gen_languages.language_created LIKE '%".$term."%' OR gen_languages.language_modified LIKE '%".$term."%' ");
+        }
+
+        return $this->db->get()->num_rows;
+    }
+
+    public function create ( $info, $user_id ) {
+
+        foreach ( $info as $_key => $_value ) {
+            if ( $_value == null ||  $_value == 'null' ) {
+                unset($info[$_key]);   
+            }
+        }
+
+        
+            $info["gen_language_owner"] = $user_id;
+        $id = $this->db->insert("gen_languages", $info );
+        $this->add_log("gen_language nesnesi oluşturuldu [ id : ".$this->db->insert_id()." ]");
+    }
+
+    public function update ( $info,  $value ) {
+
+        foreach ( $info as $_key => $_value ) {
+            if ( $_value == null ||  $_value == 'null' ) {
+                unset($info[$_key]);   
+            }
+        }
+
+        $this->db->where("language_id", $value );
+        $result = $this->db->update("gen_languages", $info );
+        $this->add_log("gen_language nesnesi güncellendi [ id : ".$value." ]");
+        return $result;
+    }
+
+    public function delete ( $value ) {
+        $this->db->where("language_id", $value);
+        $result = $this->db->delete("gen_languages" );
+        $this->add_log("gen_language nesnesi silindi [ id : ".$value." ]");
+        return $result;
+    }
+
+    public function get_table_headers () {
+        $query = "describe gen_languages";
+        $rs = $this->db->query($query);
+
+        $headers = array();
+        if ( $rs->num_rows > 0 ) {
+            foreach ( $rs->result() as $row ) {
+                $headers[] = $this->get_label_value( $row->Field );
+            }
+        }
+        return $headers;
+    }
+
+    
+
+}

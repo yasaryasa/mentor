@@ -1,0 +1,139 @@
+/* 
+    Document   : mine
+    Created on : 24.Tem.2011, 17:36:17
+    Author     : Administrator
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+#landing_menu {
+	clear: both;
+	margin: 50px auto;
+	width: 400px;
+}
+
+#landing_menu ul {
+	clear: both;
+	float: left;
+	width: 400px;
+}
+
+#langing_menu li {
+	display: inline;
+	float: left;
+}
+
+
+.landing_al {
+	width: 6px;
+	height: 54px;
+	float: left;
+	background: url(../images/bheadl.gif) top left no-repeat;
+	margin: 5px 0 5px 5px;
+	}
+
+.landing_ar {
+	width: 6px;
+	height: 54px;
+	float: left;
+	background: url(../images/bheadr.gif) top right no-repeat;
+	margin: 5px 5px 5px 0;
+	}
+
+#landing_menu a {
+	float: left;
+	width: 150px;
+	padding: 0;
+	height: 54px;
+	line-height: 54px;
+	text-align: center;
+	margin: 5px 0 5px 0;
+	font-size: 14px;
+	text-shadow: 1px 1px 0 #fff;
+	background: url(../images/bhead.gif) 0 0 repeat-x;
+}
+
+#landing_menu a.long_a {
+	float: left;
+	width: 320px;
+	padding: 0;
+	height: 54px;
+	line-height: 54px;
+	text-align: center;
+	margin: 5px 0 5px 0;
+	background: url(../images/bhead.gif) 0 0 repeat-x;
+}
+
+#time_table_content {
+	width: 550px;
+	clear: both;
+	float: left;
+}
+
+#rezervation_content {
+	width: 600px;
+	float: left;
+	margin-left: 5px;
+}
+
+#date_bar {
+	margin: 10px auto;
+	wdith: 100%;
+	text-align: center;
+}
+
+#date_bar a {
+	color: #008ee8;
+	font-weight: bold;
+	border: 1px solid #008ee8;
+}
+#date_bar a:hover {
+	color: #008ee8;
+	border: 1px solid #008ee8;
+}
+.date_pre a {
+	padding: 10px;
+	width: 4%;
+	float: left;
+	margin: 1px 2px 5px 1px;
+}
+.date_part {
+	color: #008ee8;
+	border: 1px solid #008ee8;
+	padding: 0px 50px;
+	width: 160px;
+	float: left;
+	margin: 1px 1px 5px 1px;
+	font-weight: bold;
+	overflow: hidden;
+	height: 40px;
+}
+
+.date_part input {
+	width: 100px;
+	font-size: 11pt;
+	margin-top: -2px;
+}
+
+.date_next a {
+	padding: 10px;
+	width: 4%;
+	float: left;
+	margin: 1px 0 5px 1px;
+}
+.date_today a {
+	padding: 10px;
+	width: 50px;
+	float: left;
+	margin: 1px 0 5px 1px;
+}
+
